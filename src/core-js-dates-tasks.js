@@ -120,9 +120,11 @@ function getCountDaysOnPeriod(dateStart, dateEnd) {
  * '2024-02-02', { start: '2024-02-02', end: '2024-03-02' } => true
  * '2024-02-10', { start: '2024-02-02', end: '2024-03-02' } => true
  */
-function isDateInPeriod(date, { start, end }) {
+function isDateInPeriod(date, period) {
   const currentDate = new Date(date);
-  return !!(currentDate >= new Date(start) && currentDate <= new Date(end));
+  return !!(
+    currentDate >= new Date(period.start) && currentDate <= new Date(period.end)
+  );
 }
 
 /**
@@ -244,10 +246,10 @@ function getQuarter(date) {
  * { start: '01-01-2024', end: '15-01-2024' }, 1, 3 => ['01-01-2024', '05-01-2024', '09-01-2024', '13-01-2024']
  * { start: '01-01-2024', end: '10-01-2024' }, 1, 1 => ['01-01-2024', '03-01-2024', '05-01-2024', '07-01-2024', '09-01-2024']
  */
-function getWorkSchedule({ start, end }, countWorkDays, countOffDays) {
+function getWorkSchedule(period, countWorkDays, countOffDays) {
   const result = [];
-  const startDate = new Date(start.split('-').reverse().join(','));
-  const endDate = new Date(end.split('-').reverse().join(','));
+  const startDate = new Date(period.start.split('-').reverse().join(','));
+  const endDate = new Date(period.end.split('-').reverse().join(','));
   const currentDate = new Date(startDate);
 
   let workDaysCount = 1;
