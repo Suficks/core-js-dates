@@ -32,7 +32,10 @@ function dateToTimestamp(date) {
  * Date(2015, 10, 20, 23, 15, 1) => '23:15:01'
  */
 function getTime(date) {
-  return new Date(date).toLocaleTimeString();
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  return `${hours}:${minutes}:${seconds}`;
 }
 
 /**
@@ -181,10 +184,28 @@ function getCountWeekendsInMonth(month, year) {
  * Date(2024, 0, 31) => 5
  * Date(2024, 1, 23) => 8
  */
+
 function getWeekNumberByDate(date) {
-  const start = new Date(date.getFullYear(), 0, 1);
-  const diffInDays = Math.floor((date - start) / 86400000);
-  return Math.ceil((diffInDays + start.getDay() + 1) / 7);
+  const copyDate = new Date(date);
+  const year = copyDate.getFullYear();
+  let firstDayDayOfWeek = new Date(year, 0, 1).getDay();
+
+  if (firstDayDayOfWeek === 0) {
+    firstDayDayOfWeek = 7;
+  }
+
+  const daysInFirstWeek = 7 - firstDayDayOfWeek + 1;
+  let daysCount = 0;
+
+  for (let i = 0; i < copyDate.getMonth(); i += 1) {
+    const daysInMonth = new Date(year, i + 1, 0).getDate();
+    daysCount += daysInMonth;
+  }
+
+  const daysInCurrentMonth = copyDate.getDate();
+  const countWeek =
+    Math.ceil((daysCount + daysInCurrentMonth - daysInFirstWeek) / 7) + 1;
+  return countWeek;
 }
 
 /**
